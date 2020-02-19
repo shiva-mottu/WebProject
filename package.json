@@ -1,0 +1,23 @@
+{
+  "name": "wasabi-project",
+  "version": "1.0.0",
+  "description": "Integration of Wasabi project tools into a unified web platform",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "webabi"
+  ],
+  "author": "Shiva Mottu",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.6",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "python-shell": "^1.0.8"
+  }
+}
