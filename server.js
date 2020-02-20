@@ -2,6 +2,11 @@ const express = require("express");
 const path = require("path");
 const routes = require("./routes");
 const fileUpload = require("express-fileupload");
+const bodyParser = require('body-parser');
+
+const middlewares = [
+	bodyParser.urlencoded({ extended: true }),
+  ];
 
 var app = express(),http = require("http"),server = http.createServer(app);
 

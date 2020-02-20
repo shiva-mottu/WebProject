@@ -2,13 +2,18 @@ var express = require("express");
 const fs = require("fs");
 let {PythonShell} = require('python-shell');
 
+
 var router = express.Router();
 
 TRACKS_PATH = "./public/multitrack"
 
 
 router.get("/",function(req,res){
-    res.render("index");
+    //res.render("index");
+    res.render('index', {
+        data: {player : false},
+        errors: {}
+    });
 });
 
 router.get("/mt5Player",function(req,res){
@@ -55,8 +60,14 @@ router.post("/musicFileFromWeb",function(req,res){
                         console.error(err)
                     }*/
 
-                    //res.render("index");
-                    res.redirect('/')
+                    //res.redirect('/')
+                    res.render('index', {
+                        data: {
+                            player : true,
+                            formData :req.body
+                        },
+                        errors: {}
+                    });
                   });
             }
         })
