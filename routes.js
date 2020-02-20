@@ -4,8 +4,15 @@ let {PythonShell} = require('python-shell');
 
 var router = express.Router();
 
+TRACKS_PATH = "./public/multitrack"
+
+
 router.get("/",function(req,res){
     res.render("index");
+});
+
+router.get("/mt5Player",function(req,res){
+    res.render("player");
 });
 
 router.post("/musicFileFromWeb",function(req,res){
@@ -80,5 +87,91 @@ router.post("/musicFileFromWeb",function(req,res){
 
     }
 });
+
+
+
+
+// player routing
+router.get("/track", async (req, res) => {
+    const trackList = await getTracks();
+  
+    if (!trackList) {
+      return res.send(404, "No track found");
+    }
+  
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.write(JSON.stringify(trackList));
+    res.end();
+  });
+  
+  // routing
+  router.get("/track/:id", async (req, res) => {
+    const id = req.params.id;
+    const track = await getTrack(id);
+  
+    if (!track) {
+      return res.send(404, 'Track not found with id "' + id + '"');
+    }
+  
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.write(JSON.stringify(track));
+    res.end();
+  });
+  
+  const getTracks = async () => {
+    const directories = await getFiles(TRACKS_PATH);
+    return directories.filter(dir => !dir.match(/^.DS_Store$/));
+  };
+  
+  const endsWith = (str, suffix) => str.indexOf(suffix, str.length - suffix.length) !== -1;
+  
+  isASoundFile = fileName => {
+    if (endsWith(fileName, ".mp3")) return true;
+    if (endsWith(fileName, ".ogg")) return true;
+    if (endsWith(fileName, ".wav")) return true;
+    if (endsWith(fileName, ".m4a")) return true;
+    return false;
+  };
+  
+  const getTrack = async id =>
+    new Promise(async (resolve, reject) => {
+      if (!id) reject("Need to provide an ID");
+  
+      const fileNames = await getFiles(`${TRACKS_PATH}/${id}`);
+  
+      if (!fileNames) {
+        reject(null);
+      }
+  
+      fileNames.sort();
+  
+      const track = {
+        id: id,
+        instruments: fileNames
+          .filter(fileName => isASoundFile(fileName))
+          .map(fileName => ({
+            name: fileName.match(/(.*)\.[^.]+$/, "")[1],
+            sound: fileName
+          }))
+      };
+  
+      resolve(track);
+    });
+  
+  const getFiles = async dirName =>
+    new Promise((resolve, reject) =>
+      fs.readdir(dirName, function(error, directoryObject) {
+        if (error) {
+          reject(error);
+        }
+  
+        if (directoryObject !== undefined) {
+          directoryObject.sort();
+        }
+        resolve(directoryObject);
+      })
+    );
+  
+
 
 module.exports = router;

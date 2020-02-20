@@ -7,6 +7,20 @@ var app = express(),http = require("http"),server = http.createServer(app);
 
 // Config
 const PORT = process.env.PORT,addrIP = process.env.IP;
+if (PORT == 8009) {
+	app.use(function(req, res, next) {
+	  const user = auth(req);
+  
+	  if (user === undefined || user["name"] !== "super" || user["pass"] !== "secret") {
+		res.statusCode = 401;
+		res.setHeader("WWW-Authenticate", 'Basic realm="Super duper secret area"');
+		res.end("Unauthorized");
+	  } else {
+		next();
+	  }
+	});
+  }
+
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded());
@@ -18,7 +32,7 @@ app.set("port",process.env.PORT || 3000);
 
 app.set("views",path.join(__dirname,"views"));
 app.set("view engine","ejs");
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 app.use(routes);
 
