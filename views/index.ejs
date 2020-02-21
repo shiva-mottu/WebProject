@@ -153,15 +153,15 @@
             var n = 0;
 
             function progress() {
-                if (n < 100) {
+                if (n <= 99) {
                     document.querySelector(".progress-bar-striped > div").textContent = n + "%";
                     document.querySelector(".progress-bar-striped > div").style.width = n + "%";
                     n++;
-                } else {
+                }/* else {
                     clearInterval(interval);
                     document.getElementById("progressbar").classList.add('hidden');
                     document.getElementById("info").classList.add('hidden');
-                }
+                }*/
             }
 
             /* fetch('/musicFileFromWeb', {
@@ -251,10 +251,9 @@
 
         <% if (data.player) { %>
             <div class="row hyperLink">
-                <h4><a href="/mt5Player">MT5 : an HTML5 Multitrack player !</a></h4>
+                <h4><a href="/mt5Player?name=<%= data.name %>">MT5 : an HTML5 Multitrack player ! (<%= data.name %>)</a></h4>
              </div>
         <% } %>
-        
 
     </div>
 </body>

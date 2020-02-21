@@ -1,23 +1,40 @@
 var express = require("express");
 const fs = require("fs");
+let fsExtra = require("fs-extra");
 let {PythonShell} = require('python-shell');
 
 
 var router = express.Router();
 
-TRACKS_PATH = "./public/multitrack"
+TRACKS_PATH = "./public/multitrack/"
 
 
 router.get("/",function(req,res){
-    //res.render("index");
     res.render('index', {
-        data: {player : false},
+        data: {
+            player : false  
+        },
         errors: {}
     });
 });
 
-router.get("/mt5Player",function(req,res){
-    res.render("player");
+
+
+router.get("/mt5Player", async (req, res) => {
+  const name = req.query.name;
+  let source = "./spleeter-tool/output/"+name;
+  let destination = TRACKS_PATH+name;
+
+  // copy source folder to destination
+  fsExtra.copy(source, destination, function (err) {
+    if (err){
+        console.log('An error occured while copying the folder.')
+        return console.error(err)
+    }
+    console.log('Copy completed!')
+  });
+
+  res.render("player");
 });
 
 router.post("/musicFileFromWeb",function(req,res){
@@ -64,7 +81,7 @@ router.post("/musicFileFromWeb",function(req,res){
                     res.render('index', {
                         data: {
                             player : true,
-                            formData :req.body
+                            name :results[0].split(".")[0]
                         },
                         errors: {}
                     });
@@ -88,9 +105,17 @@ router.post("/musicFileFromWeb",function(req,res){
                 for(var i =0;i<results.length;i++){
                     console.log('results: ', results[i]);
                 }
+
+                res.render('index', {
+                    data: {
+                        player : true,
+                        name :results[0].split(".")[0]
+                    },
+                    errors: {}
+                });
               });
     
-              res.render("index");
+              
         }else{
             res.redirect('/')
         }

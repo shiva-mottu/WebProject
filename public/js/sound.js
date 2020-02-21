@@ -284,11 +284,21 @@ function finishedLoading(bufferList) {
     }
 }
 
+// get the parameter from url
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
 
 // ######### SONGS
 function loadSongList() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', "track", true);
+    let choosenSong = getUrlVars()["name"];
+    xhr.open('GET', "track/"+choosenSong, true);
+    //xhr.open('GET', "track", true);
 
     // Menu for song selection
     var s = $("<select id='songSelect'/>");
@@ -309,23 +319,34 @@ function loadSongList() {
     });
 
     xhr.onload = function (e) {
-        var songList = JSON.parse(this.response);
+        var specifiedSong = JSON.parse(this.response);
 
-        if (songList[0]) {
+        if (specifiedSong.id == "") {
             $("<option />", {
                 value: "nochoice",
                 text: "Choose a song..."
             }).appendTo(s);
         }
 
-        songList.forEach(function (songName) {
+        /*songList.forEach(function (songName) {
             console.log(songName);
 
             $("<option />", {
                 value: songName,
                 text: songName
             }).appendTo(s);
-        });
+        });*/
+
+        let songName = specifiedSong.id 
+        console.log(songName);
+
+        $("<option />", {
+            value: songName,
+            text: songName
+        }).appendTo(s);
+
+        let choosenSong = getUrlVars()["name"];
+        $('#songSelect').val( choosenSong ).change();
     };
     xhr.send();
 }

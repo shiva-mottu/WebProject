@@ -14,13 +14,13 @@ if( filePath.startswith( 'https:') ):
 
     youtube_cmd = "youtube-dl -f bestaudio[ext=m4a] --get-filename "+ filePath +" --restrict-filenames"
     fileName = subprocess.check_output(youtube_cmd,shell=True).decode("utf-8").split(".")[0].split("-"+youtube_id)[0]+".mp3"
-    print("full path {}".format(fileName))
+    print(fileName)
 
     youtube_cmd = "youtube-dl -x --audio-format mp3 "+ filePath +" -o /spleeter-tool/spleeter/songs/%(title)s.%(ext)s --restrict-filenames"
     subprocess.call(youtube_cmd)
 else:
     fileName = filePath
-    print("File Name : {}".format(fileName))
+    print(fileName)
 
 #spleeter_cmd = "python -m spleeter separate -i  spleeter/songs/"+ fileName +".mp3 -p spleeter:"+stems+"stems -o output"
 spleeter_cmd = "python -m spleeter separate -i  spleeter/songs/"+ fileName +" -p spleeter:"+stems+"stems -o output"
