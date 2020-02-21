@@ -102,54 +102,12 @@
 
     <script>
 
-        /*window.onload = function(){ 
-            document.getElementById('formData').onsubmit = function(e) { 
-                e.preventDefault();
-                form = document.getElementById('formData');
-                var obj = new FormData();
-
-                var elements = form.querySelectorAll( "input, select" );
-                for( var i = 0; i < elements.length; ++i ) {
-                    var element = elements[i];
-                    var name = element.name;
-                    var value = element.value;
-                    if (name == "musicFile" )
-                    {
-                        value = element.files[0];
-                    }
-
-                    if( name ) {
-                        obj[ name ] = value;
-                    }
-                }
-
-                console.log(file);
-                console.log(obj);
-
-                fetch('/musicFileFromWeb', {
-                    headers : { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                },
-                method: 'post',
-                body: file.files[0]
-                }).then(function(response) {
-                    return response.json();
-                }).then(function(data) {
-                    console.log('Created Gist:', data.html_url);
-                });
-
-                return false;
-            }; 
-        };*/
-        
-
         function progressBar() {
             document.getElementById("progressbar").classList.remove('hidden');
             document.getElementById("info").classList.remove('hidden');
             var interval = setInterval(function() {
                 progress()
-            }, 800);
+            }, 1000);
             var n = 0;
 
             function progress() {
@@ -157,24 +115,8 @@
                     document.querySelector(".progress-bar-striped > div").textContent = n + "%";
                     document.querySelector(".progress-bar-striped > div").style.width = n + "%";
                     n++;
-                }/* else {
-                    clearInterval(interval);
-                    document.getElementById("progressbar").classList.add('hidden');
-                    document.getElementById("info").classList.add('hidden');
-                }*/
+                }
             }
-
-            /* fetch('/musicFileFromWeb', {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json, text/plain',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({a: 7, str: 'Some string: &=&'})
-            }).then(res=>res.json())
-            .then(res => console.log(res));
-            */
-
         }
     </script>
 </head>
