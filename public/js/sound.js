@@ -296,8 +296,7 @@ function getUrlVars() {
 // ######### SONGS
 function loadSongList() {
     var xhr = new XMLHttpRequest();
-    let choosenSong = getUrlVars()["name"];
-    xhr.open('GET', "track/"+choosenSong, true);
+    xhr.open('GET', "track", true);
     //xhr.open('GET', "track", true);
 
     // Menu for song selection
@@ -319,31 +318,23 @@ function loadSongList() {
     });
 
     xhr.onload = function (e) {
-        var specifiedSong = JSON.parse(this.response);
+        var songList = JSON.parse(this.response);
 
-        if (specifiedSong.id == "") {
+        if (songList[0]) {
             $("<option />", {
                 value: "nochoice",
                 text: "Choose a song..."
             }).appendTo(s);
         }
 
-        /*songList.forEach(function (songName) {
+        songList.forEach(function (songName) {
             console.log(songName);
 
             $("<option />", {
                 value: songName,
                 text: songName
             }).appendTo(s);
-        });*/
-
-        let songName = specifiedSong.id 
-        console.log(songName);
-
-        $("<option />", {
-            value: songName,
-            text: songName
-        }).appendTo(s);
+        });
 
         let choosenSong = getUrlVars()["name"];
         $('#songSelect').val( choosenSong ).change();
